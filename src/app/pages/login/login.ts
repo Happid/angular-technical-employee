@@ -3,10 +3,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
 import { ToastrService } from 'ngx-toastr';
+import { FormError } from '../../components/form-error/form-error';
 
 @Component({
   selector: 'app-login',
-  imports: [ ReactiveFormsModule ],
+  imports: [ 
+    ReactiveFormsModule,
+    FormError
+  ],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })

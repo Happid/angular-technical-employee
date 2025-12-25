@@ -1,0 +1,19 @@
+@if (control && control.touched && control.errors) {
+
+  @if (control.errors['required']) {
+    <span>Field ini wajib diisi</span>
+  }
+
+  @if (control.errors['minlength']) {
+    <span>
+      Minimal {{ control.errors['minlength'].requiredLength }} karakter
+    </span>
+  }
+
+  @if (control.errors['maxlength']) {
+    <span>
+      Maksimal {{ control.errors['maxlength'].requiredLength }} karakter
+    </span>
+  }
+
+}

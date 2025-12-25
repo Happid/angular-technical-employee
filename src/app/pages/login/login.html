@@ -4,28 +4,28 @@
 
   <div>
     <label>Username</label><br />
-    <input type="text" formControlName="username" />
-    @if (loginForm.get('username')?.touched && loginForm.get('username')?.invalid) {
-        <span>
-            Username wajib diisi
-        </span>
-    }
+    <input type="text" formControlName="username" required minlength="3" maxlength="25"/>
+    <app-form-error
+      [control]="loginForm.get('username')">
+    </app-form-error>
   </div>
 
   <br />
 
   <div>
     <label>Password</label><br />
-    <input type="password" formControlName="password" />
-    @if (loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
-        <span>
-            Password wajib diisi
-        </span>
-    }
+    <input type="password" formControlName="password" required minlength="3" maxlength="25"/>
+    <app-form-error
+      [control]="loginForm.get('password')">
+    </app-form-error>
   </div>
 
   <br />
 
-  <button type="submit">Login</button>
+  <button 
+    [disabled]="loginForm.invalid"
+    type="submit">
+    Login
+  </button>
 
 </form>
