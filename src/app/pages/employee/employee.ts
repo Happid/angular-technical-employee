@@ -3,10 +3,15 @@ import { EmployeeService } from '../../services/employee-service';
 import { IListEmployee } from '../../models/employee.model';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-employee',
-  imports: [FormsModule, RouterLink],
+  imports: [
+    FormsModule, 
+    RouterLink,
+    NgClass
+  ],
   templateUrl: './employee.html',
   styleUrl: './employee.css',
 })
