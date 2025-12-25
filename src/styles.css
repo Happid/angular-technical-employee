@@ -1,3 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'ngx-toastr/toastr';
 @import "tailwindcss";
+
+input{
+    @apply block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6
+}

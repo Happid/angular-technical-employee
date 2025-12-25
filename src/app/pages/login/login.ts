@@ -4,19 +4,22 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
 import { ToastrService } from 'ngx-toastr';
 import { FormError } from '../../components/form-error/form-error';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-login',
-  imports: [ 
+  imports: [
     ReactiveFormsModule,
-    FormError
-  ],
+    FormError,
+    NgClass
+],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login implements OnInit{
 
   loginForm!: FormGroup;
+  isShowPassword: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -52,5 +55,5 @@ export class Login implements OnInit{
         }
       });
   }
-  
+
 }
