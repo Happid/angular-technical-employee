@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from '../../services/employee-service';
 import { IListEmployee } from '../../models/employee.model';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-employee',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './employee.html',
   styleUrl: './employee.css',
 })
