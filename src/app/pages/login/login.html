@@ -1,0 +1,31 @@
+<h2>Login</h2>
+
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+  <div>
+    <label>Username</label><br />
+    <input type="text" formControlName="username" />
+    @if (loginForm.get('username')?.touched && loginForm.get('username')?.invalid) {
+        <span>
+            Username wajib diisi
+        </span>
+    }
+  </div>
+
+  <br />
+
+  <div>
+    <label>Password</label><br />
+    <input type="password" formControlName="password" />
+    @if (loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
+        <span>
+            Password wajib diisi
+        </span>
+    }
+  </div>
+
+  <br />
+
+  <button type="submit">Login</button>
+
+</form>
