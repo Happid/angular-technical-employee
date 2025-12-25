@@ -41,7 +41,8 @@ export class Login implements OnInit{
       .subscribe(isValid => {
         if (isValid) {
           this.toastr.success('Hello world!', 'Toastr fun!');
-          this.router.navigate(['/employees']);
+          localStorage.setItem('token', 'my-token-123');
+          this.router.navigate(['/employee']);
         } else {
           this.toastr.error('Username atau password salah', 'Login Gagal');
         }
