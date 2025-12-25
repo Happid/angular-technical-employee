@@ -12,8 +12,8 @@ export class EmployeeService {
 
   constructor(private http: HttpClient) {}
 
-  getEmployees(): Observable<Employee[]> {
-    return this.http.get<Employee[]>(this.DATA_URL);
+  getEmployees(): Observable<Employee> {
+    return this.http.get<Employee>(this.DATA_URL);
   }
   
 }

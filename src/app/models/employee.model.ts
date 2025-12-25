@@ -1,4 +1,8 @@
 export interface Employee {
+  employee: ListEmployee[]
+}
+
+export interface ListEmployee {
   id: string;
   username: string;
   firstName: string;
