@@ -65,15 +65,14 @@
              @for (emp of pagedEmployees; track emp.id) {
               <tr class="border-b">
                 <td class="flex items-center">
-                  <!-- status -->
-                  <div class="w-2 h-2 rounded-full mr-1"
+                  <div class="w-2 h-2 rounded-full mr-1 shrink-0"
                   [ngClass]="emp.status === 'ACTIVE' ? 'bg-green-500' : 'bg-red-500'"></div>
                   {{ emp.firstName }}
                 </td>
                 <td>{{ emp.lastName }}</td>
                 <td>{{ emp.email }}</td>
                 <td>{{ emp.group }}</td>
-                <td>{{ emp.basicSalary | currency:'Rp. ':'symbol':'1.0' }}</td>
+                <td class="text-nowrap">{{ emp.basicSalary | currency:'Rp. ':'symbol':'1.0' }}</td>
                 <td class="flex space-x-2">
                   <button 
                   class="cursor-pointer bg-yellow-500" 

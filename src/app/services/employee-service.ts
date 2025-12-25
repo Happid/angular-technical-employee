@@ -43,4 +43,23 @@ export class EmployeeService {
     localStorage.setItem('employee', JSON.stringify(data));
   }
 
+  updateEmployee(updatedEmployee: IListEmployee): void {
+    const localData = localStorage.getItem('employee');
+    const employees: IListEmployee[] = localData ? JSON.parse(localData) : [];
+
+    const index = employees.findIndex(emp => emp.id === updatedEmployee.id);
+
+    if (index === -1) {
+      return;
+    }
+
+    employees[index] = {
+      ...employees[index],
+      ...updatedEmployee,
+      id: employees[index].id
+    };
+
+    localStorage.setItem('employee', JSON.stringify(employees));
+  }
+
 }

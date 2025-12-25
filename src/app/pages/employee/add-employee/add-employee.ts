@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { v4 as uuidv4 } from 'uuid';
 import { EmployeeService } from '../../../services/employee-service';
 import { ToastrService } from 'ngx-toastr';
 import { NgClass } from '@angular/common';
 import { FormError, maxDateToday } from '../../../components/form-error/form-error';
 import { ThousandSeparatorDirective } from '../../../directive/ThousandSeparatorDirective';
+import { IListEmployee } from '../../../models/employee.model';
 
 @Component({
   selector: 'app-add-employee',
@@ -16,6 +17,7 @@ import { ThousandSeparatorDirective } from '../../../directive/ThousandSeparator
 })
 export class AddEmployee implements OnInit{
 
+  employee?: IListEmployee;
   employeeForm!: FormGroup;
   today: string = new Date().toISOString().split('T')[0];
 
@@ -33,17 +35,36 @@ export class AddEmployee implements OnInit{
   ];
   open = false;
   filteredGroups: string[] = [...this.groups];
+  isEditMode: boolean = false;
+  employeeId: string | null = null;
+  queryParams: any;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private employeeService: EmployeeService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
+    this.initForm();
     this.filteredGroups = this.groups;
 
+    const id = this.route.snapshot.paramMap.get('id');
+    this.queryParams = this.route.snapshot.queryParams;
+    if (id) {
+      this.isEditMode = true;
+      this.employeeId = id;
+      this.loadEmployee(id);
+    }
+  }
+
+  formatCurrency(value: string): string {
+    return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  initForm(){
     this.employeeForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       firstName: ['', [Validators.required, Validators.minLength(3)]],
@@ -54,6 +75,25 @@ export class AddEmployee implements OnInit{
       status: [true, Validators.required],
       group: ['', Validators.required],
       description: ['', [Validators.required, Validators.minLength(3)]],
+    });
+  }
+
+  loadEmployee(id: string): void {
+    this.employeeService.getEmployees().subscribe(res => {
+      const emp = res.employee.find(e => e.id === id);
+      if (!emp) return;
+
+      this.employeeForm.patchValue({
+        username: emp.username,
+        firstName: emp.firstName,
+        lastName: emp.lastName,
+        email: emp.email,
+        birthDate: emp.birthDate.split('T')[0],
+        basicSalary: this.formatCurrency(emp.basicSalary.toString()),
+        status: emp.status === 'ACTIVE',
+        group: emp.group,
+        description: emp.description,
+      });
     });
   }
 
@@ -79,17 +119,48 @@ export class AddEmployee implements OnInit{
     const newEmployee = {
       id: uuidv4(),
       ...this.employeeForm.value,
-      status: this.employeeForm.status ? 'ACTIVE' : 'INACTIVE',
+      status: this.employeeForm.get('status')?.value ? 'ACTIVE' : 'INACTIVE',
       createdAt: new Date().toISOString()
     };
+   
+    if (this.isEditMode) {
+      this.updateEmployee(newEmployee);
+    } else {
+      this.addEmployee(newEmployee);
+    }
+  }
 
-    this.employeeService.addEmployee(newEmployee);
+  updateEmployee(data: any): void {
+    const rawSalary = this.employeeForm.value.basicSalary.replace(/\./g, '');
+    const payload: IListEmployee = {
+      ...data,
+      id: this.employeeId,
+      status: this.employeeForm.get('status')?.value ? 'ACTIVE' : 'INACTIVE',
+      createdAt: this.employee?.createdAt ?? new Date().toISOString(),
+      basicSalary: Number(rawSalary)
+    };
+   
+    this.employeeService.updateEmployee(payload);
+    this.toastr.success('Data Karyawan Berhasil Diperbarui', 'Sukses');
+    this.router.navigate(['/employee'], {
+      queryParams: this.queryParams
+    });
+  }
+
+  addEmployee(data: any){
+    this.employeeService.addEmployee(data);
     this.toastr.success('Data Karyawan Berhasil Ditambah', 'Suksess');
     this.router.navigate(['/employee']);
   }
 
   onCancel(): void {
-    this.router.navigate(['/employee']);
+    if(this.isEditMode){
+      this.router.navigate(['/employee'], {
+        queryParams: this.queryParams
+      });
+    }else{
+      this.router.navigate(['/employee']);
+    }
   }
 
   get disabledBtn(){

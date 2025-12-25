@@ -1,10 +1,13 @@
-<h1 class="text-center font-bold text-2xl py-10">Add Employee Form</h1>
+<h1 class="text-center font-bold text-2xl py-10 md:mt-30">
+  {{ isEditMode ? "Edit Employee Form" : "Add Employee Form" }}
+</h1>
+
 <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <div>
       <label>Username</label><br />
-      <input type="text" formControlName="username" required [minlength]="3" placeholder="Entry your username"
+      <input type="text" formControlName="username" required [minlength]="3" maxlength="25" placeholder="Entry your username"
       [ngClass]="employeeForm.get('username')?.touched && employeeForm.get('username')?.invalid ? 'outline-red-600' : ''"/>
       <app-form-error
         [control]="employeeForm.get('username')">
@@ -13,7 +16,7 @@
 
     <div>
       <label>First Name</label><br />
-      <input type="text" formControlName="firstName" required [minlength]="3" placeholder="Entry your firstname"
+      <input type="text" formControlName="firstName" required [minlength]="3" maxlength="25" placeholder="Entry your firstname"
       [ngClass]="employeeForm.get('firstName')?.touched && employeeForm.get('firstName')?.invalid ? 'outline-red-600' : ''"/>
       <app-form-error
         [control]="employeeForm.get('firstName')">
@@ -22,7 +25,7 @@
 
     <div>
       <label>Last Name</label><br />
-      <input type="text" formControlName="lastName" required [minlength]="3" placeholder="Entry your lastname"
+      <input type="text" formControlName="lastName" required [minlength]="3" maxlength="25" placeholder="Entry your lastname"
       [ngClass]="employeeForm.get('lastName')?.touched && employeeForm.get('lastName')?.invalid ? 'outline-red-600' : ''"/>
       <app-form-error
         [control]="employeeForm.get('lastName')">
@@ -31,7 +34,7 @@
 
     <div>
       <label>Email</label><br />
-      <input type="email" formControlName="email" required [minlength]="3" placeholder="Entry your email@mail.com"
+      <input type="email" formControlName="email" required [minlength]="3" maxlength="30" placeholder="Entry your email@mail.com"
       [ngClass]="employeeForm.get('email')?.touched && employeeForm.get('email')?.invalid ? 'outline-red-600' : ''"/>
       <app-form-error
         [control]="employeeForm.get('email')">
@@ -67,7 +70,7 @@
           formControlName="basicSalary" 
           required 
           minlength="3" 
-          maxlength="25">
+          maxlength="17">
       </div>
       <app-form-error
         [control]="employeeForm.get('basicSalary')">
@@ -159,7 +162,7 @@
     [ngClass]="disabledBtn ? 'cursor-not-allowed bg-gray-400' : 'cursor-pointer bg-purple-600'"
     type="submit"
     [disabled]="disabledBtn">
-      Save
+      {{ isEditMode ? "Update Employee" : "Create Employee" }}
     </button>
     <button class="cursor-pointer bg-red-600" type="button" (click)="onCancel()">Back To Employee Page</button>
   </div>
