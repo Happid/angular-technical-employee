@@ -1,59 +1,48 @@
 # AngularTechnicalEmployee
+- Angular Version 20
+- Mock Data JSON
+- Tailwindcss
+- Toaster (ngx-toastr)
+- Live Demo using vercel 
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10.
-
-## Development server
-
-To start a local development server, run:
-
-```bash
+## How to Run
+1. make sure you have angular, nodejs and git.
+2. clone the repository https://github.com/Happid/angular-technical-employee using ssh or https
+3. open terminal and copy paste
+```terminal
+git clone https://github.com/Happid/angular-technical-employee.git
+```
+4. open the project `YOUR_FOLDER/angular-technical-employee` and in the terminal
+```terminal
+npm install
+```
+5. for running application
+```terminal
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Credential Login
+- username: admin
+- password: admin
+- or you can change in public/mockup/login.json
 
-## Code scaffolding
+## Implementation Of
+- Reactive Form Module and Validation
+- Reusable Form Error
+- Dynamic Route
+- Protected Route using Token
+- Custom Directive
+- Mockup JSON and Usage of Localstorage
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Feature
+### 1. Login Page
+![Login Page](https://res.cloudinary.com/dwzkwvgkz/image/upload/v1766684892/ng-login_hor6wk.png)
 
-```bash
-ng generate component component-name
-```
+### 2. Employee List Page
+![List Page](https://res.cloudinary.com/dwzkwvgkz/image/upload/v1766684892/ng-list_ofxfh0.png)
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### 3. Add Employee Page
+![Add Page](https://res.cloudinary.com/dwzkwvgkz/image/upload/v1766684895/ng-add_ycfepz.png)
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### 4. Edit / Detail Employee Page
+![Detail Page](https://res.cloudinary.com/dwzkwvgkz/image/upload/v1766684893/ng-edit_tifwji.png)
