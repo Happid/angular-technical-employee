@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { IEmployee } from '../models/employee.model';
+import { Observable, of, tap } from 'rxjs';
+import { IEmployee, IListEmployee } from '../models/employee.model';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,34 @@ export class EmployeeService {
   constructor(private http: HttpClient) {}
 
   getEmployees(): Observable<IEmployee> {
-    return this.http.get<IEmployee>(this.DATA_URL);
+    const localData = localStorage.getItem('employee');
+
+    if (localData) {
+      return of({
+        employee: JSON.parse(localData),
+      });
+    }
+    return this.http.get<IEmployee>(this.DATA_URL).pipe(
+      tap((res) => {
+        localStorage.setItem(
+          'employee',
+          JSON.stringify(res.employee)
+        );
+      })
+    );
   }
-  
+
+  addEmployee(newEmployee: IListEmployee): void {
+    const localData = localStorage.getItem('employee');
+    const employees = localData ? JSON.parse(localData) : [];
+
+    employees.push(newEmployee);
+
+    localStorage.setItem('employee', JSON.stringify(employees));
+  }
+
+  deleteEmployees(data: IListEmployee[]): void {
+    localStorage.setItem('employee', JSON.stringify(data));
+  }
+
 }

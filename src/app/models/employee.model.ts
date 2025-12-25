@@ -13,4 +13,5 @@ export interface IListEmployee {
   status: 'ACTIVE' | 'INACTIVE';
   group: string;
   description: string;
+  createdAt: string;
 }

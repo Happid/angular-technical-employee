@@ -47,7 +47,6 @@ export class Login implements OnInit{
     this.authService.login(username, password)
       .subscribe(isValid => {
         if (isValid) {
-          this.toastr.success('Hello world!', 'Toastr fun!');
           localStorage.setItem('token', 'my-token-123');
           this.router.navigate(['/employee']);
         } else {

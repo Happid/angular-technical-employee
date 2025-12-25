@@ -1,11 +1,16 @@
 
-<div class="flex justify-end mb-3">
+
+<div class="flex justify-between items-center mt-5 mb-3">
   <div class="w-[300]">
     <button 
     class="cursor-pointer bg-purple-600" 
     routerLink="/employee/add">
       Add Employee
     </button>
+  </div>
+  <div class="cursor-pointer hover:text-red-600"
+  (click)="logout()">
+    Logout
   </div>
 </div>
 
@@ -27,15 +32,18 @@
   </div>
 </div>
 
-<div class="w-[80px] mb-3">
-  Show
-  <select (change)="changePageSize($event)">
-    <option value="5">5</option>
-    <option value="10" selected>10</option>
-    <option value="25">25</option>
-    <option value="50">50</option>
-    <option value="100">100</option>
-  </select>
+<div class="flex justify-between items-center">
+  <div class="w-[80px] mb-3">
+    Show
+    <select (change)="changePageSize($event)">
+      <option value="5">5</option>
+      <option value="10" selected>10</option>
+      <option value="25">25</option>
+      <option value="50">50</option>
+      <option value="100">100</option>
+    </select>
+  </div>
+  <span>Total Data: <b>{{employees.length}}</b></span>
 </div>
 
 
@@ -56,11 +64,16 @@
           @if (pagedEmployees.length > 0) {
              @for (emp of pagedEmployees; track emp.id) {
               <tr class="border-b">
-                <td>{{ emp.firstName }}</td>
+                <td class="flex items-center">
+                  <!-- status -->
+                  <div class="w-2 h-2 rounded-full mr-1"
+                  [ngClass]="emp.status === 'ACTIVE' ? 'bg-green-500' : 'bg-red-500'"></div>
+                  {{ emp.firstName }}
+                </td>
                 <td>{{ emp.lastName }}</td>
                 <td>{{ emp.email }}</td>
                 <td>{{ emp.group }}</td>
-                <td>{{ emp.basicSalary }}</td>
+                <td>{{ emp.basicSalary | currency:'Rp. ':'symbol':'1.0' }}</td>
                 <td class="flex space-x-2">
                   <button 
                   class="cursor-pointer bg-yellow-500" 
@@ -68,7 +81,8 @@
                     Edit
                   </button>
                   <button 
-                  class="cursor-pointer bg-red-500">
+                  class="cursor-pointer bg-red-500"
+                  (click)="onDelete(emp)">
                     Delete
                   </button>
                 </td>
@@ -96,9 +110,9 @@
 
   <button
     class="bg-black"
-    [ngClass]="currentPage === totalPages ? 'cursor-not-allowed bg-gray-500' : 'cursor-pointer bg-gray-800'"
+    [ngClass]="currentPage >= totalPages ? 'cursor-not-allowed bg-gray-500' : 'cursor-pointer bg-gray-800'"
     (click)="setPage(currentPage + 1)"
-    [disabled]="currentPage === totalPages">
+    [disabled]="currentPage >= totalPages">
     Next
   </button>
 </div>

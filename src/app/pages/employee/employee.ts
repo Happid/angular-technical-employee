@@ -3,14 +3,16 @@ import { EmployeeService } from '../../services/employee-service';
 import { IListEmployee } from '../../models/employee.model';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { NgClass } from '@angular/common';
+import { CurrencyPipe, NgClass } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-employee',
   imports: [
     FormsModule, 
     RouterLink,
-    NgClass
+    NgClass,
+    CurrencyPipe
   ],
   templateUrl: './employee.html',
   styleUrl: './employee.css',
@@ -24,8 +26,8 @@ export class Employee implements OnInit{
   searchName: string = '';
   searchGroup: string = '';
 
-  sortField: keyof IListEmployee = 'firstName';
-  sortDirection: 'asc' | 'desc' = 'asc';
+  sortField: keyof IListEmployee = 'createdAt';
+  sortDirection: 'asc' | 'desc' = 'desc';
 
   pageSize: number = 10;
   currentPage: number = 1;
@@ -34,10 +36,12 @@ export class Employee implements OnInit{
   constructor(
     private employeeService: EmployeeService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrService
   ){}
 
   ngOnInit(): void {
+    this.sortField = 'createdAt';
     this.route.queryParams.subscribe(params => {
       this.searchName = params['name'] || '';
       this.searchGroup = params['group'] || '';
@@ -64,6 +68,14 @@ export class Employee implements OnInit{
     );
 
     data.sort((a, b) => {
+      if (this.sortField === 'createdAt') {
+        const aDate = new Date(a.createdAt).getTime();
+        const bDate = new Date(b.createdAt).getTime();
+        return this.sortDirection === 'asc'
+          ? aDate - bDate
+          : bDate - aDate;
+      }
+
       const aVal = a[this.sortField];
       const bVal = b[this.sortField];
 
@@ -101,14 +113,34 @@ export class Employee implements OnInit{
   }
 
   goToDetail(emp: IListEmployee): void {
-  this.router.navigate(['/employee', emp.id], {
-    queryParams: {
-      name: this.searchName,
-      group: this.searchGroup,
-      page: this.currentPage,
-      size: this.pageSize
-    }
-  });
-}
+    this.router.navigate(['/employee', emp.id], {
+      queryParams: {
+        name: this.searchName,
+        group: this.searchGroup,
+        page: this.currentPage,
+        size: this.pageSize
+      }
+    });
+  }
+
+  onDelete(emp: IListEmployee): void {
+    const confirmed = confirm(
+      `Apakah anda yakin ingin menghapus employee ${emp.firstName} ${emp.lastName}?`
+    );
+    if (!confirmed) return;
+
+    this.employees = this.employees.filter(e => e.id !== emp.id);
+    this.employeeService.deleteEmployees(this.employees);
+    this.applyFilter();
+    this.toastr.success(
+      `Employee ${emp.firstName} berhasil dihapus`,
+      'Delete'
+    );
+  }
+
+  logout(){
+    localStorage.clear();
+    this.router.navigate(['/login']);
+  }
 
 }

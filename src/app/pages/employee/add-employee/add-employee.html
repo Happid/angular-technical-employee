@@ -1,74 +1,167 @@
+<h1 class="text-center font-bold text-2xl py-10">Add Employee Form</h1>
 <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
 
-  <div>
-    <label>Username</label><br />
-    <input type="text" formControlName="username" />
-  </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div>
+      <label>Username</label><br />
+      <input type="text" formControlName="username" required [minlength]="3" placeholder="Entry your username"
+      [ngClass]="employeeForm.get('username')?.touched && employeeForm.get('username')?.invalid ? 'outline-red-600' : ''"/>
+      <app-form-error
+        [control]="employeeForm.get('username')">
+      </app-form-error>
+    </div>
 
-  <div>
-    <label>First Name</label><br />
-    <input type="text" formControlName="firstName" />
-  </div>
+    <div>
+      <label>First Name</label><br />
+      <input type="text" formControlName="firstName" required [minlength]="3" placeholder="Entry your firstname"
+      [ngClass]="employeeForm.get('firstName')?.touched && employeeForm.get('firstName')?.invalid ? 'outline-red-600' : ''"/>
+      <app-form-error
+        [control]="employeeForm.get('firstName')">
+      </app-form-error>
+    </div>
 
-  <div>
-    <label>Last Name</label><br />
-    <input type="text" formControlName="lastName" />
-  </div>
+    <div>
+      <label>Last Name</label><br />
+      <input type="text" formControlName="lastName" required [minlength]="3" placeholder="Entry your lastname"
+      [ngClass]="employeeForm.get('lastName')?.touched && employeeForm.get('lastName')?.invalid ? 'outline-red-600' : ''"/>
+      <app-form-error
+        [control]="employeeForm.get('lastName')">
+      </app-form-error>
+    </div>
 
-  <div>
-    <label>Email</label><br />
-    <input type="email" formControlName="email" />
-    @if (employeeForm.get('email')?.touched && employeeForm.get('email')?.errors?.['email']) {
-      <span>Email tidak valid</span>
-    }
-  </div>
+    <div>
+      <label>Email</label><br />
+      <input type="email" formControlName="email" required [minlength]="3" placeholder="Entry your email@mail.com"
+      [ngClass]="employeeForm.get('email')?.touched && employeeForm.get('email')?.invalid ? 'outline-red-600' : ''"/>
+      <app-form-error
+        [control]="employeeForm.get('email')">
+      </app-form-error>
+    </div>
 
-  <div>
-    <label>Birth Date</label><br />
-    <input
-      type="date"
-      formControlName="birthDate"
-      [max]="today" />
-  </div>
+    <div>
+      <label>Birth Date</label><br />
+      <input
+        type="date"
+        formControlName="birthDate"
+        [max]="today" 
+        required
+        [ngClass]="employeeForm.get('birthDate')?.touched && employeeForm.get('birthDate')?.invalid ? 'outline-red-600' : ''"/>
+      <app-form-error
+        [control]="employeeForm.get('birthDate')">
+      </app-form-error>
+    </div>
 
-  <div>
-    <label>Basic Salary</label><br />
-    <input
-      type="number"
-      formControlName="basicSalary" />
-  </div>
+    <div>
+      <label>Basic Salary</label><br />
+      <div class="relative">
+          <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none text-sm text-gray-400">
+              Rp.
+          </div>
+          <input 
+          type="text"
+          thousandSeparator
+          style="padding-left: 40px;"
+          class="ps-9 pe-3" 
+          [ngClass]="employeeForm.get('basicSalary')?.touched && employeeForm.get('basicSalary')?.invalid ? 'outline-red-600' : ''"
+          placeholder="10.0000.000"
+          formControlName="basicSalary" 
+          required 
+          minlength="3" 
+          maxlength="25">
+      </div>
+      <app-form-error
+        [control]="employeeForm.get('basicSalary')">
+      </app-form-error>
+    </div>
 
-  <div>
-    <label>Status</label><br />
-    <input type="text" formControlName="status" />
-  </div>
+    <div class="mb-4 relative">
+      <label class="block mb-1 text-sm font-medium text-gray-700">
+        Group
+      </label>
 
-  <!-- GROUP DROPDOWN WITH SEARCH -->
-  <div>
-    <label>Group</label><br />
+      <!-- INPUT -->
+      <input
+        type="text"
+        formControlName="group"
+        placeholder="Search or select group..."
+        (focus)="open = true"
+        (input)="filterGroup($event)"
+        class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+              focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        [ngClass]="(employeeForm.get('group')?.touched && employeeForm.get('group')?.invalid) || filteredGroups.length === 0 || open ? 'outline-red-600' : ''"
+      />
 
-    <input
-      type="text"
-      placeholder="Search group..."
-      [(ngModel)]="groupSearch"
-      (input)="filterGroup()"
-      [ngModelOptions]="{ standalone: true }"/>
-
-    <select formControlName="group">
-      @for (g of filteredGroups; track g) {
-        <option [value]="g">{{ g }}</option>
+      <!-- DROPDOWN -->
+      @if (open && filteredGroups.length > 0) {
+      <div
+        class="absolute z-10 mt-1 w-full rounded-md border border-gray-200
+              bg-white shadow-lg max-h-48 overflow-auto"
+      >
+      
+        @for (g of filteredGroups; track $index) {
+        <div
+          (click)="selectGroup(g)"
+          class="cursor-pointer px-3 py-2 text-sm hover:bg-blue-50"
+        >
+          {{ g }}
+        </div>
+        }
+      </div>
       }
-    </select>
-  </div>
 
-  <div>
-    <label>Description</label><br />
-    <textarea formControlName="description"></textarea>
+      <!-- EMPTY STATE -->
+      @if (open && filteredGroups.length === 0) {
+      <div
+        class="absolute z-10 mt-1 w-full rounded-md border border-gray-200
+              bg-white shadow-lg px-3 py-2 text-sm text-gray-500"
+      >
+        No group found
+      </div>
+      }
+
+      <app-form-error
+        [control]="employeeForm.get('group')">
+      </app-form-error>
+    </div>
+
+
+    <div>
+      <label>Description</label><br />
+      <textarea formControlName="description" required [minlength]="3" placeholder="Entry your description"
+        [ngClass]="employeeForm.get('description')?.touched && employeeForm.get('description')?.invalid ? 'outline-red-600' : ''">
+      </textarea>
+      <app-form-error
+        [control]="employeeForm.get('description')">
+      </app-form-error>
+    </div>
+
+    <div>
+      <label>Status Karyawan</label><br />
+      <label class="inline-flex items-center cursor-pointer mt-2">
+        <input type="checkbox" formControlName="status" class="sr-only peer">
+        <div class="peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full 
+        peer-checked:after:border-buffer relative w-9 h-5 bg-gray-200 rounded-full  
+        after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white 
+        after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-500"></div>
+        <span class="select-none ms-3 text-sm font-medium text-heading">
+          {{ employeeForm.get('status')?.value ? 'Aktif' : 'Non Aktif' }}
+        </span>
+      </label> 
+    </div>
+    
   </div>
+  
 
   <br />
 
-  <button type="submit">Save</button>
-  <button type="button" (click)="onCancel()">Cancel</button>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <button 
+    [ngClass]="disabledBtn ? 'cursor-not-allowed bg-gray-400' : 'cursor-pointer bg-purple-600'"
+    type="submit"
+    [disabled]="disabledBtn">
+      Save
+    </button>
+    <button class="cursor-pointer bg-red-600" type="button" (click)="onCancel()">Back To Employee Page</button>
+  </div>
 
 </form>

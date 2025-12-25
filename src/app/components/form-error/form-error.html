@@ -1,19 +1,27 @@
 @if (control && control.touched && control.errors) {
 
   @if (control.errors['required']) {
-    <span>Field ini wajib diisi</span>
+    <span class="text-xs text-red-600">Field ini wajib diisi</span>
   }
 
   @if (control.errors['minlength']) {
-    <span>
+    <span class="text-xs text-red-600">
       Minimal {{ control.errors['minlength'].requiredLength }} karakter
     </span>
   }
 
   @if (control.errors['maxlength']) {
-    <span>
+    <span class="text-xs text-red-600">
       Maksimal {{ control.errors['maxlength'].requiredLength }} karakter
     </span>
+  }
+
+  @if (control.errors['email']) {
+    <span class="text-xs text-red-600">Email tidak valid</span>
+  }
+
+  @if (control.hasError('maxDate')) {
+    <span class="text-red-500 text-sm">Tanggal lahir tidak boleh melebihi hari ini</span>
   }
 
 }
