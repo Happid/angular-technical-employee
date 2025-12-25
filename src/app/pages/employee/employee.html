@@ -1,1 +1,70 @@
-<p>employee works!</p>
+<div>
+  <input
+    type="text"
+    placeholder="Search First Name"
+    [(ngModel)]="searchName"
+    (input)="applyFilter()" />
+
+  <input
+    type="text"
+    placeholder="Search Group"
+    [(ngModel)]="searchGroup"
+    (input)="applyFilter()" />
+</div>
+
+<div>
+  Show
+  <select (change)="changePageSize($event)">
+    <option value="5">5</option>
+    <option value="10" selected>10</option>
+    <option value="25">25</option>
+    <option value="50">50</option>
+    <option value="100">100</option>
+  </select>
+  entries
+</div>
+
+<table border="1" width="100%">
+  <thead>
+    <tr>
+      <th (click)="changeSort('firstName')">First Name</th>
+      <th (click)="changeSort('lastName')">Last Name</th>
+      <th (click)="changeSort('email')">Email</th>
+      <th (click)="changeSort('group')">Group</th>
+      <th (click)="changeSort('basicSalary')">Salary</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (emp of pagedEmployees; track emp.id) {
+      <tr>
+        <td>{{ emp.firstName }}</td>
+        <td>{{ emp.lastName }}</td>
+        <td>{{ emp.email }}</td>
+        <td>{{ emp.group }}</td>
+        <td>{{ emp.basicSalary }}</td>
+        <td>
+          <button>Edit</button>
+          <button>Delete</button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+<div>
+  <button
+    (click)="setPage(currentPage - 1)"
+    [disabled]="currentPage === 1">
+    Prev
+  </button>
+
+  Page {{ currentPage }} / {{ totalPages }}
+
+  <button
+    (click)="setPage(currentPage + 1)"
+    [disabled]="currentPage === totalPages">
+    Next
+  </button>
+</div>

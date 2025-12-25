@@ -1,8 +1,8 @@
-export interface Employee {
-  employee: ListEmployee[]
+export interface IEmployee {
+  employee: IListEmployee[]
 }
 
-export interface ListEmployee {
+export interface IListEmployee {
   id: string;
   username: string;
   firstName: string;
