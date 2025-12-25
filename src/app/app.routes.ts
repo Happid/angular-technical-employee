@@ -3,6 +3,7 @@ import { Login } from './pages/login/login';
 import { Employee } from './pages/employee/employee';
 import { AuthGuard } from './guards/auth.guard';
 import { AddEmployee } from './pages/employee/add-employee/add-employee';
+import { DetailEmployee } from './pages/employee/detail-employee/detail-employee';
 
 export const routes: Routes = [
     { path: "", redirectTo: "login", pathMatch: "full" },
@@ -15,6 +16,11 @@ export const routes: Routes = [
     { 
         path: "employee/add", 
         component: AddEmployee,
+        canActivate: [AuthGuard]
+    },
+    { 
+        path: "employee/:id", 
+        component: DetailEmployee,
         canActivate: [AuthGuard]
     },
     { path: "**", redirectTo: "login" }

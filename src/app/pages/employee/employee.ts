@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from '../../services/employee-service';
 import { IListEmployee } from '../../models/employee.model';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-employee',
@@ -26,10 +26,21 @@ export class Employee implements OnInit{
   currentPage: number = 1;
   totalPages: number = 0;
 
-  constructor(private employeeService: EmployeeService){}
+  constructor(
+    private employeeService: EmployeeService,
+    private router: Router,
+    private route: ActivatedRoute
+  ){}
 
   ngOnInit(): void {
-    this.getAllEmployee();
+    this.route.queryParams.subscribe(params => {
+      this.searchName = params['name'] || '';
+      this.searchGroup = params['group'] || '';
+      this.currentPage = +params['page'] || 1;
+      this.pageSize = +params['size'] || 10;
+
+      this.getAllEmployee();
+    });
   }
   
   getAllEmployee(){
@@ -83,5 +94,16 @@ export class Employee implements OnInit{
     this.pageSize = Number(event.target.value);
     this.applyFilter();
   }
+
+  goToDetail(emp: IListEmployee): void {
+  this.router.navigate(['/employee', emp.id], {
+    queryParams: {
+      name: this.searchName,
+      group: this.searchGroup,
+      page: this.currentPage,
+      size: this.pageSize
+    }
+  });
+}
 
 }
